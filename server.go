@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/byuoitav/authmiddleware"
-	"github.com/byuoitav/av-api/handlers"
+	"github.com/byuoitav/av-api-rpc/handlers"
 	"github.com/jessemillar/health"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
@@ -25,7 +25,7 @@ func main() {
 	secure.GET("/buildings/:building/rooms/:room", handlers.GetRoomByNameAndBuildingHandler)
 
 	// PUT requests
-	secure.PUT("/buildings/:building/rooms/:room", handlers.RoomCommands)
+	secure.PUT("/buildings/:building/rooms/:room", handlers.SendRoomCommands)
 
 	server := http.Server{
 		Addr:           port,
