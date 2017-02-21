@@ -15,7 +15,7 @@ type RPCDevice struct {
 type RPCCommand struct {
 	Name       string         `json:"name"`
 	Parameters []RPCParameter `json:"parameters,omitempty"`
-	Success    bool           `json:"success,omitempty"`
+	Success    *bool          `json:"success,omitempty"`
 }
 
 //RPCParameter .
