@@ -3,6 +3,8 @@ package base
 //RPCRequest and it's children structs represent the expected put body for this command.
 type RPCRequest struct {
 	RPCDevices []RPCDevice `json:"rpcDevices"`
+	Room       string      `json:"room"`
+	Building   string      `json:"building"`
 }
 
 //RPCDevice .
