@@ -1,6 +1,7 @@
 package helpers
 
 import (
+	"fmt"
 	"log"
 	"regexp"
 
@@ -26,10 +27,11 @@ func RunCommands(request base.RPCRequest) ([]apiEvals.CommandExecutionReporting,
 
 	ActionList := []apibase.ActionStructure{}
 
-	re := regexp.MustCompile(".*-RPC")
+	re := regexp.MustCompile(".*-RPC$")
 
 	log.Printf("Beginning evaluation run...")
 	for _, evaluator := range room.Configuration.Commands {
+		fmt.Printf("Command Key: %s\n", evaluator.CommandKey)
 		if re.MatchString(evaluator.CommandKey) { //Check to make sure that it's an RPC evaulator
 			log.Printf("Found evaluator: %s, evaluating", evaluator.CommandKey)
 			if evalStruct, ok := evaulatorMap[evaluator.CommandKey]; ok {

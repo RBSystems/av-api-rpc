@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"encoding/json"
 	"log"
 	"net/http"
 
@@ -38,10 +37,5 @@ func SendRoomCommands(context echo.Context) error {
 		return context.JSON(http.StatusInternalServerError, err.Error())
 	}
 
-	b, err := json.Marshal(report)
-	if err != nil {
-		return context.JSON(http.StatusInternalServerError, err.Error())
-	}
-
-	return context.JSON(http.StatusOK, string(b))
+	return context.JSON(http.StatusOK, report)
 }

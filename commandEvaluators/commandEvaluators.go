@@ -99,7 +99,7 @@ func checkForCommandInDevice(toEval avbase.ActionStructure, commandName string) 
 			return nil
 		}
 	}
-	message := fmt.Sprintf("There is no command %s for the device %s", CommandName, toEval.Device.GetFullName())
+	message := fmt.Sprintf("There is no command %s for the device %s", commandName, toEval.Device.GetFullName())
 	log.Printf("%s", message)
 	return errors.New(message)
 
@@ -114,7 +114,9 @@ func Init() map[string]CommandEvaluator {
 	if !commandMapInitialized {
 
 		CommandMap["VolumeUpDefault-RPC"] = &VolumeUpDefault{}
-
+		CommandMap["VolumeDownDefault-RPC"] = &VolumeDownDefault{}
+		CommandMap["MuteDefault-RPC"] = &MuteDefault{}
+		CommandMap["UnMuteDefault-RPC"] = &UnMuteDefault{}
 		commandMapInitialized = true
 	}
 
