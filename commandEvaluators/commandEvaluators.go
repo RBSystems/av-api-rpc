@@ -2,9 +2,12 @@ package commandEvaluators
 
 import (
 	"errors"
+	"fmt"
 	"log"
 
+	"github.com/byuoitav/av-api-rpc/base"
 	avbase "github.com/byuoitav/av-api/base"
+	avdbo "github.com/byuoitav/av-api/dbo"
 )
 
 //CommandExecutionReporting is a struct we use to keep track of command execution
@@ -15,6 +18,8 @@ type CommandExecutionReporting struct {
 	Device  string `json:"device"`
 	Err     string `json:"error,omitempty"`
 }
+
+var commandMapInitialized = false
 
 /*
 CommandEvaluator is an interface that must be implemented for each command to be
@@ -32,7 +37,7 @@ type CommandEvaluator interface {
 		  Validate takes an action structure (for the command) and validates
 			that the device and parameter are valid for the command.
 	*/
-	Validate(base.ActionStructure) error
+	Validate(avbase.ActionStructure) error
 	/*
 			   GetIncompatableActions returns a list of commands that are incompatable
 		     with this one (i.e. 'standby' and 'power on', or 'mute' and 'volume up')
@@ -51,10 +56,14 @@ generatePassthroughCommand can be a generic evaluator for each command when that
 */
 func generatePassthroughCommand(req base.RPCRequest, CommandName string, generatingEvaluator string) ([]avbase.ActionStructure, error) {
 	toreturn := []avbase.ActionStructure{}
-
+	log.Printf("Starting evaluation for %s", CommandName)
 	for _, device := range req.RPCDevices {
+		log.Printf("Looking in device %s for applicable commands", device.Name)
 		for _, command := range device.Commands {
 			if command.Name == CommandName {
+
+				log.Printf("Command found for device %s", device.Name)
+
 				databaseDevice, err := avdbo.GetDeviceByName(req.Building, req.Room, device.Name)
 				if err != nil {
 					log.Printf("Error getting device from databse. ERROR: %v", err.Error())
@@ -70,33 +79,41 @@ func generatePassthroughCommand(req base.RPCRequest, CommandName string, generat
 				toreturn = append(toreturn, avbase.ActionStructure{
 					Action:              CommandName,
 					GeneratingEvaluator: generatingEvaluator,
-					Device:              databseDevice,
+					Device:              databaseDevice,
 					Parameters:          params,
 					DeviceSpecific:      true,
 				})
+				log.Printf("Event Generated")
 			}
 		}
 	}
-	return []avbase.ActionStructure{}, nil
+	return toreturn, nil
 
 }
 
 func checkForCommandInDevice(toEval avbase.ActionStructure, commandName string) error {
-
+	log.Printf("Validating that command %s is a valid command for device %s", toEval.Action, toEval.Device.GetFullName())
 	for _, cmd := range toEval.Device.Commands {
 		if cmd.Name == commandName {
+			log.Printf("Command validated.")
 			return nil
 		}
 	}
-	return errors.New("There is no command %s for the device %s", CommandName, toEval.Device.GetFullName())
+	message := fmt.Sprintf("There is no command %s for the device %s", CommandName, toEval.Device.GetFullName())
+	log.Printf("%s", message)
+	return errors.New(message)
 
 }
+
+var CommandMap = make(map[string]CommandEvaluator)
 
 /*
 Init simply initializes the map of RPC command evaluators
 */
 func Init() map[string]CommandEvaluator {
 	if !commandMapInitialized {
+
+		CommandMap["VolumeUpDefault-RPC"] = &VolumeUpDefault{}
 
 		commandMapInitialized = true
 	}

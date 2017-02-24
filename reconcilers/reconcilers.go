@@ -30,7 +30,7 @@ func Init() map[string]ActionReconciler {
 		//-------------------------------
 		//Add reconcilers to the map here
 		//-------------------------------
-
+		reconcilerMap["default-RPC"] = &DefaultReconciler{}
 		reconcilerMapInitialized = true
 	}
 

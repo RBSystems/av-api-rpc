@@ -1,4 +1,4 @@
-package main
+package commandEvaluators
 
 import (
 	"github.com/byuoitav/av-api-rpc/base"
