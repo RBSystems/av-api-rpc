@@ -9,13 +9,13 @@ import (
 type UnMuteDefault struct{}
 
 func (v *UnMuteDefault) Evaluate(req base.RPCRequest) ([]avbase.ActionStructure, error) {
-	var CommandName = "UnMute"
-	var EvaluatorName = "UnMuteDefault-RPC"
+	var CommandName = "ToggleMute"
+	var EvaluatorName = "ToggleMute-RPC"
 	return generatePassthroughCommand(req, CommandName, EvaluatorName)
 }
 
 func (v *UnMuteDefault) Validate(toEval avbase.ActionStructure) error {
-	var CommandName = "UnMute"
+	var CommandName = "ToggleMute"
 	return checkForCommandInDevice(toEval, CommandName)
 }
 

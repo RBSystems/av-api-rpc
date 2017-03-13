@@ -115,8 +115,7 @@ func Init() map[string]CommandEvaluator {
 
 		CommandMap["VolumeUpDefault-RPC"] = &VolumeUpDefault{}
 		CommandMap["VolumeDownDefault-RPC"] = &VolumeDownDefault{}
-		CommandMap["MuteDefault-RPC"] = &MuteDefault{}
-		CommandMap["UnMuteDefault-RPC"] = &UnMuteDefault{}
+		CommandMap["ToggleMute-RPC"] = &MuteDefault{}
 		commandMapInitialized = true
 	}
 
