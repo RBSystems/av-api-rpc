@@ -1,4 +1,4 @@
-OM resin/armv7hf-debian-qemu
+resin/armv7hf-debian-qemu
 
 RUN [ "cross-build-start" ]
 
