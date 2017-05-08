@@ -30,14 +30,14 @@ func RunCommands(request base.RPCRequest) ([]apiEvals.CommandExecutionReporting,
 	re := regexp.MustCompile(".*-RPC$")
 
 	log.Printf("Beginning evaluation run...")
-	for _, evaluator := range room.Configuration.Commands {
-		fmt.Printf("Command Key: %s\n", evaluator.CommandKey)
-		if re.MatchString(evaluator.CommandKey) { //Check to make sure that it's an RPC evaulator
-			log.Printf("Found evaluator: %s, evaluating", evaluator.CommandKey)
-			if evalStruct, ok := evaulatorMap[evaluator.CommandKey]; ok {
+	for _, evaluator := range room.Configuration.Evaluators {
+		fmt.Printf("Command Key: %s\n", evaluator.EvaluatorKey)
+		if re.MatchString(evaluator.EvaluatorKey) { //Check to make sure that it's an RPC evaulator
+			log.Printf("Found evaluator: %s, evaluating", evaluator.EvaluatorKey)
+			if evalStruct, ok := evaulatorMap[evaluator.EvaluatorKey]; ok {
 				tempList, err := evalStruct.Evaluate(request)
 				if err != nil {
-					log.Printf("Error generating actions for %s. ERROR: %s", evaluator.CommandKey, err.Error())
+					log.Printf("Error generating actions for %s. ERROR: %s", evaluator.EvaluatorKey, err.Error())
 					return []apiEvals.CommandExecutionReporting{}, err
 				}
 				log.Printf("%v events generated", len(tempList))
